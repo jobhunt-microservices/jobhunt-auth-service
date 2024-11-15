@@ -11,7 +11,7 @@ import { Model, Op } from 'sequelize';
 class AuthService {
   async createAuthUser(data: IAuthDocument): Promise<IAuthDocument> {
     const result: Model = await AuthModel.create(data);
-    const mesageDetails: IAuthBuyerMessageDetails = {
+    const messageDetails: IAuthBuyerMessageDetails = {
       username: result.dataValues.username,
       email: result.dataValues.email,
       profilePicture: result.dataValues.profilePicture,
@@ -21,7 +21,7 @@ class AuthService {
       authChannel,
       exchangeNames.BUYER_UPDATE,
       routingKeys.USER_BUYER,
-      JSON.stringify(mesageDetails),
+      JSON.stringify(messageDetails),
       'Buyer details sent to buyer service'
     );
     const userData: IAuthDocument = omit(result.dataValues) as IAuthDocument;
@@ -60,7 +60,7 @@ class AuthService {
     return user?.dataValues;
   }
 
-  async getAuthUserByVerifycationToken(token: string): Promise<IAuthDocument> {
+  async getAuthUserByVerificationToken(token: string): Promise<IAuthDocument> {
     const user: Model<IAuthDocument> = (await AuthModel.findOne({
       where: {
         emailVerificationToken: token
@@ -87,7 +87,7 @@ class AuthService {
     return user?.dataValues;
   }
 
-  async updateVerifyEmailField(authId: number, emailVerified: boolean, emailVerificationToken: string): Promise<void> {
+  async updateVerifyEmailField(authId: number, emailVerified: number, emailVerificationToken?: string): Promise<void> {
     await AuthModel.update(
       {
         emailVerified,

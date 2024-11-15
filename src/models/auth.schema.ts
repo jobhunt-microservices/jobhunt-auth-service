@@ -13,9 +13,9 @@ interface AuthModelInstanceMethods extends Model {
 
 type AuthUserCreationAttributes = Optional<IAuthDocument, 'id' | 'createdAt' | 'passwordResetToken' | 'passwordResetExpires'>;
 
-type AuthtModelType = ModelDefined<IAuthDocument, AuthUserCreationAttributes> & AuthModelInstanceMethods;
+type AuthModelType = ModelDefined<IAuthDocument, AuthUserCreationAttributes> & AuthModelInstanceMethods;
 
-const AuthModel: AuthtModelType = database.sequelize.define(
+const AuthModel: AuthModelType = database.sequelize.define(
   'auths',
   {
     username: {
@@ -70,7 +70,7 @@ const AuthModel: AuthtModelType = database.sequelize.define(
       }
     ]
   }
-) as AuthtModelType;
+) as AuthModelType;
 
 AuthModel.addHook('beforeCreate', async (auth: Model) => {
   const hashedPassword: string = await hash(auth.dataValues.password as string, SALT_ROUND);

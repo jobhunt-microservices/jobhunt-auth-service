@@ -55,7 +55,7 @@ export class AuthServer {
     );
     this.app.use((req: Request, res: Response, next: NextFunction) => {
       if (req.headers.authorization) {
-        const token = req.headers.authorization.split('')[1];
+        const token = (req.headers.authorization as string).split(' ')[1];
         const payload = verify(token, `${config.JWT_TOKEN}`) as IAuthPayload;
         req.currentUser = payload;
       }

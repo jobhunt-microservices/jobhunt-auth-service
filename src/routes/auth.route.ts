@@ -1,4 +1,5 @@
 import { authController } from '@auth/controllers/auth.controller';
+import { verifyEmailController } from '@auth/controllers/verify-email.controller';
 import express, { Router } from 'express';
 
 class AuthRoutes {
@@ -10,6 +11,7 @@ class AuthRoutes {
   public routes(): Router {
     this.router.post('/signup', authController.create);
     this.router.post('/signin', authController.read);
+    this.router.post('/verify-email', verifyEmailController.verifyEmail);
     return this.router;
   }
 }

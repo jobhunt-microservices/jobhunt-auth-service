@@ -32,14 +32,14 @@ class AuthController {
       }
     }
     const randomBytes: Buffer = await Promise.resolve(crypto.randomBytes(20));
-    const randomCharactors: string = randomBytes.toString('hex');
+    const randomCharacters: string = randomBytes.toString('hex');
     const authData: IAuthDocument = {
       username: username,
       email: email,
       profilePublicId,
       password,
       profilePicture: uploadResult?.secure_url ?? null,
-      emailVerificationToken: randomCharactors
+      emailVerificationToken: randomCharacters
     };
     const result = await authService.createAuthUser(authData);
     const verificationLink = `${config.CLIENT_URL}/confirm_email?v_token${authData.emailVerificationToken}`;
@@ -50,7 +50,7 @@ class AuthController {
     };
     await authProducer.publishDirectMessage(
       authChannel,
-      exchangeNames.BUYER_UPDATE,
+      exchangeNames.EMAIL_NOTIFICATION,
       routingKeys.USER_BUYER,
       JSON.stringify(messageDetails),
       'Verify email message has been sent to notification service'
