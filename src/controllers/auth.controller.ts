@@ -19,8 +19,8 @@ class AuthController {
       throw new BadRequestError(error?.details[0].message, 'Sign up create() method error');
     }
     const { username, email, password, profilePicture } = req.body;
-    const checkIfUserExist: IAuthDocument = await authService.getAuthUserByUsernameOrEmail(username, email);
-    if (checkIfUserExist) {
+    const existingUser = await authService.getAuthUserByUsernameOrEmail(username, email);
+    if (existingUser) {
       throw new BadRequestError('User already exists', 'Sign up create() method error');
     }
     const profilePublicId = uuidv4();
@@ -55,7 +55,10 @@ class AuthController {
       JSON.stringify(messageDetails),
       'Verify email message has been sent to notification service'
     );
-    const userJWT: string = authService.signToken(result.id!, result.email!, result.username!);
+    const userJWT = authService.signToken(result.id!, result.email!, result.username!);
+    if (!userJWT) {
+      throw new BadRequestError('Error when signing token', 'RefreshToken refreshToken() method error');
+    }
     res.status(StatusCodes.CREATED).json({ message: 'User created successfully', token: userJWT });
   }
 
@@ -77,7 +80,10 @@ class AuthController {
       throw new BadRequestError('Invalid credentials', 'SignIn read() method error');
     }
     let message = 'User login successfully';
-    const userJWT: string = authService.signToken(existingUser.id!, existingUser.email!, existingUser.username!);
+    const userJWT = authService.signToken(existingUser.id!, existingUser.email!, existingUser.username!);
+    if (!userJWT) {
+      throw new BadRequestError('Error when signing token', 'RefreshToken refreshToken() method error');
+    }
     res.status(StatusCodes.OK).json({ message, token: userJWT });
   }
 }

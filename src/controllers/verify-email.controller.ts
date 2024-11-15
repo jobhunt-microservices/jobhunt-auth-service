@@ -1,12 +1,12 @@
 import { authService } from '@auth/services/auth.service';
-import { BadRequestError, IAuthDocument } from '@jobhunt-microservices/jobhunt-shared';
+import { BadRequestError } from '@jobhunt-microservices/jobhunt-shared';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 class VerifyEmailController {
   async verifyEmail(req: Request, res: Response): Promise<void> {
-    const { token } = req.body;
-    const existingUser: IAuthDocument | undefined = await authService.getAuthUserByVerificationToken(token);
+    const token = req.query?.token as string;
+    const existingUser = await authService.getAuthUserByVerificationToken(token);
     if (!existingUser) {
       throw new BadRequestError('Verification token is either invalid or is already used.', 'VerifyEmail update() method error');
     }

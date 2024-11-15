@@ -18,8 +18,7 @@ class CurrentUserController {
     res.status(StatusCodes.OK).json({ message: 'Authenticated user', user: existingUser });
   }
   async resendEmail(req: Request, res: Response): Promise<void> {
-    const { userId } = req.body;
-    const existingUser: IAuthDocument | undefined = await authService.getAuthUserById(userId);
+    const existingUser: IAuthDocument | undefined = await authService.getAuthUserById(req.currentUser!.id);
     if (!existingUser) {
       throw new BadRequestError('Email is invalid', SERVICE_NAME + ' CurrentUser resentEmail() method error');
     }

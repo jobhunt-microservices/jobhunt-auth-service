@@ -43,6 +43,10 @@ const AuthModel: AuthModelType = database.sequelize.define(
       allowNull: false,
       defaultValue: 0
     },
+    emailVerificationToken: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     passwordResetToken: {
       type: DataTypes.STRING,
       allowNull: true
