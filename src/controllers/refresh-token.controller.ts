@@ -5,8 +5,7 @@ import { StatusCodes } from 'http-status-codes';
 
 class RefreshTokenController {
   async refreshToken(req: Request, res: Response): Promise<void> {
-    const { username } = req.params;
-    const existingUser = await authService.getAuthUserByUsername(username);
+    const existingUser = await authService.getAuthUserById(req.currentUser!.id);
     if (!existingUser) {
       throw new BadRequestError('Invalid credentials', 'RefreshToken refreshToken() method error');
     }
