@@ -1,8 +1,8 @@
+import { config } from '@auth/config';
 import { SERVICE_NAME } from '@auth/constants';
 import { logger } from '@auth/utils/logger.util';
 import { getErrorMessage } from '@jobhunt-microservices/jobhunt-shared';
 import { Sequelize } from 'sequelize';
-import { config } from './config';
 
 const log = logger('authDatabaseServer', 'debug');
 
