@@ -40,6 +40,6 @@ export const authMock: IAuthDocument = {
   username: 'Manny',
   email: 'manny@test.com',
   profilePicture: '',
-  emailVerified: 1,
+  emailVerified: 0,
   createdAt: '2024-12-19T07:42:24.431Z'
 } as unknown as IAuthDocument;

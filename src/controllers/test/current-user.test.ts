@@ -1,6 +1,7 @@
+import { SERVICE_NAME } from '@auth/constants';
 import { currentUserController } from '@auth/controllers/current-user.controller';
 import { authService } from '@auth/services/auth.service';
-import { NotFoundError } from '@jobhunt-microservices/jobhunt-shared';
+import { BadRequestError, NotFoundError } from '@jobhunt-microservices/jobhunt-shared';
 import { Request, Response } from 'express';
 import { Sequelize } from 'sequelize';
 import { authMock, authMockRequest, authMockResponse, authUserPayload } from './mocks/auth.mock';
@@ -32,7 +33,7 @@ describe('CurrentUser', () => {
     await mockConnection.close();
   });
 
-  describe('read method', () => {
+  describe('read current user method', () => {
     it('should return authenticated user', async () => {
       const req: Request = authMockRequest({}, { username, password }, authUserPayload) as unknown as Request;
       const res: Response = authMockResponse();
@@ -45,12 +46,56 @@ describe('CurrentUser', () => {
       });
     });
 
-    it('should return empty user', async () => {
+    it('should return throw exception if user not found', async () => {
       const req: Request = authMockRequest({}, { username, password }, authUserPayload) as unknown as Request;
       const res: Response = authMockResponse();
       jest.spyOn(authService, 'getAuthUserById').mockResolvedValue(undefined);
       await currentUserController.read(req, res).catch((error) => {
         expect(error).toBeInstanceOf(NotFoundError);
+        expect(NotFoundError).toHaveBeenCalledWith('User not found', SERVICE_NAME + ' CurrentUser read() method');
+      });
+    });
+  });
+
+  describe('resend email method', () => {
+    it('should return BadRequestError if email does not exist', async () => {
+      const req: Request = authMockRequest({}, { username, password }, authUserPayload) as unknown as Request;
+      const res: Response = authMockResponse();
+      jest.spyOn(authService, 'getAuthUserById').mockResolvedValue(undefined);
+      await currentUserController.resendEmail(req, res).catch((error) => {
+        expect(error).toBeInstanceOf(BadRequestError);
+        expect(BadRequestError).toHaveBeenCalledWith('Email is invalid', SERVICE_NAME + ' CurrentUser resentEmail() method error');
+      });
+    });
+
+    it('should return BadRequestError if email has been verified', async () => {
+      const req: Request = authMockRequest({}, { username, password }, authUserPayload) as unknown as Request;
+      const res: Response = authMockResponse();
+      jest.spyOn(authService, 'getAuthUserById').mockResolvedValue({ ...authMock, emailVerified: 1 });
+      await currentUserController.resendEmail(req, res).catch((error) => {
+        expect(error).toBeInstanceOf(BadRequestError);
+        expect(BadRequestError).toHaveBeenCalledWith('Email has been verified', SERVICE_NAME + ' CurrentUser resentEmail() method error');
+      });
+    });
+
+    it('should call updateVerifyEmailField method', async () => {
+      const req: Request = authMockRequest({}, { username, password }, authUserPayload) as unknown as Request;
+      const res: Response = authMockResponse();
+      jest.spyOn(authService, 'getAuthUserById').mockResolvedValue(authMock);
+      await currentUserController.resendEmail(req, res);
+      expect(authService.updateVerifyEmailField).toHaveBeenCalled();
+    });
+
+    it('should send the email', async () => {
+      const req: Request = authMockRequest({}, { username, password }, authUserPayload) as unknown as Request;
+      const res: Response = authMockResponse();
+      jest.spyOn(authService, 'getAuthUserById').mockResolvedValue(authMock);
+      await currentUserController.resendEmail(req, res);
+      expect(authService.updateVerifyEmailField).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        message: 'Email verification sent',
+        user: authMock
       });
     });
   });

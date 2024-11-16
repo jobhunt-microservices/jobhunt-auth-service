@@ -28,6 +28,7 @@ class CurrentUserController {
     const randomBytes: Buffer = await Promise.resolve(crypto.randomBytes(20));
     const randomCharacters: string = randomBytes.toString('hex');
     const verificationLink = `${config.CLIENT_URL}/confirm_email?v_token=${randomCharacters}`;
+
     await authService.updateVerifyEmailField(existingUser.id!, 0, randomCharacters);
     const messageDetails: IEmailMessageDetails = {
       receiverEmail: existingUser.email,
