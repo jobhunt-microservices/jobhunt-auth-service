@@ -4,21 +4,21 @@ import { exchangeNames, routingKeys } from '@auth/queues/constants/queue.constan
 import { authProducer } from '@auth/queues/producers/auth.producer';
 import { authChannel } from '@auth/server';
 import { authService } from '@auth/services/auth.service';
-import { BadRequestError, IAuthDocument, IEmailMessageDetails, NotFoundError } from '@jobhunt-microservices/jobhunt-shared';
+import { BadRequestError, IEmailMessageDetails, NotFoundError } from '@jobhunt-microservices/jobhunt-shared';
 import crypto from 'crypto';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 class CurrentUserController {
   async read(req: Request, res: Response): Promise<void> {
-    const existingUser: IAuthDocument | undefined = await authService.getAuthUserById(req.currentUser!.id);
+    const existingUser = await authService.getAuthUserById(req.currentUser!.id);
     if (!existingUser) {
       throw new NotFoundError('User not found', SERVICE_NAME + ' CurrentUser read() method');
     }
     res.status(StatusCodes.OK).json({ message: 'Authenticated user', user: existingUser });
   }
   async resendEmail(req: Request, res: Response): Promise<void> {
-    const existingUser: IAuthDocument | undefined = await authService.getAuthUserById(req.currentUser!.id);
+    const existingUser = await authService.getAuthUserById(req.currentUser!.id);
     if (!existingUser) {
       throw new BadRequestError('Email is invalid', SERVICE_NAME + ' CurrentUser resentEmail() method error');
     }

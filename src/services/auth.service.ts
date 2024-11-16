@@ -11,7 +11,7 @@ import { Model, Op } from 'sequelize';
 
 const log = logger('authService', 'debug');
 
-class AuthService {
+export class AuthService {
   async createAuthUser(data: IAuthDocument): Promise<IAuthDocument> {
     const result: Model = await AuthModel.create(data);
     const messageDetails: IAuthBuyerMessageDetails = {

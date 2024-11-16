@@ -69,9 +69,7 @@ class AuthController {
     }
     const { username, password } = req.body;
     const isValidEmail: boolean = isEmail(username);
-    const existingUser: IAuthDocument | undefined = !isValidEmail
-      ? await authService.getAuthUserByUsername(username)
-      : await authService.getAuthUserByEmail(username);
+    const existingUser = !isValidEmail ? await authService.getAuthUserByUsername(username) : await authService.getAuthUserByEmail(username);
     if (!existingUser) {
       throw new BadRequestError('Invalid credentials', 'SignIn read() method error');
     }
