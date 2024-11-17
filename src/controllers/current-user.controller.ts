@@ -1,11 +1,10 @@
 import { config } from '@auth/config';
 import { SERVICE_NAME } from '@auth/constants';
-import { exchangeNames, routingKeys } from '@auth/queues/constants/queue.constant';
 import { authProducer } from '@auth/queues/producers/auth.producer';
 import { authChannel } from '@auth/server';
 import { authService } from '@auth/services/auth.service';
 import { generateRandomCharacters } from '@auth/utils/generate.util';
-import { BadRequestError, IEmailMessageDetails, NotFoundError } from '@jobhunt-microservices/jobhunt-shared';
+import { BadRequestError, ExchangeNames, IEmailMessageDetails, NotFoundError, RoutingKeys } from '@jobhunt-microservices/jobhunt-shared';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
@@ -36,8 +35,8 @@ class CurrentUserController {
     };
     await authProducer.publishDirectMessage(
       authChannel,
-      exchangeNames.SEND_EMAIL,
-      routingKeys.SEND_EMAIL,
+      ExchangeNames.SEND_EMAIL,
+      RoutingKeys.SEND_EMAIL,
       JSON.stringify(messageDetails),
       'Verify email message has been sent to notification service.'
     );

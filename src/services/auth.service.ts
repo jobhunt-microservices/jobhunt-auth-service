@@ -1,10 +1,16 @@
 import { config } from '@auth/config';
 import { AuthModel } from '@auth/models/auth.schema';
-import { exchangeNames, routingKeys } from '@auth/queues/constants/queue.constant';
 import { authProducer } from '@auth/queues/producers/auth.producer';
 import { authChannel } from '@auth/server';
 import { logger } from '@auth/utils/logger.util';
-import { getErrorMessage, IAuthBuyerMessageDetails, IAuthDocument, lowerCase } from '@jobhunt-microservices/jobhunt-shared';
+import {
+  ExchangeNames,
+  getErrorMessage,
+  IAuthBuyerMessageDetails,
+  IAuthDocument,
+  lowerCase,
+  RoutingKeys
+} from '@jobhunt-microservices/jobhunt-shared';
 import { sign } from 'jsonwebtoken';
 import { omit } from 'lodash';
 import { Model, Op } from 'sequelize';
@@ -22,8 +28,8 @@ export class AuthService {
     };
     await authProducer.publishDirectMessage(
       authChannel,
-      exchangeNames.BUY_CREATED,
-      routingKeys.BUYER_CREATED,
+      ExchangeNames.BUY_CREATED,
+      RoutingKeys.BUYER_CREATED,
       JSON.stringify(messageDetails),
       'User has been created'
     );

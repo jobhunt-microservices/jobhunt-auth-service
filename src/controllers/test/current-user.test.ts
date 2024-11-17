@@ -18,7 +18,7 @@ let mockConnection: Sequelize;
 describe('CurrentUser', () => {
   beforeEach(async () => {
     jest.resetAllMocks();
-    mockConnection = new Sequelize(`${process.env.MYSQL_DB}`, {
+    mockConnection = new Sequelize(`${process.env.DATABASE_URL}`, {
       dialect: 'mysql',
       logging: false,
       dialectOptions: {

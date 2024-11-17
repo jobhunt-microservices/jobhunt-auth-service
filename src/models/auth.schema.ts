@@ -28,7 +28,7 @@ const AuthModel: AuthModelType = database.sequelize.define(
     },
     profilePublicId: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     email: {
       type: DataTypes.STRING,
