@@ -22,8 +22,8 @@ export class AuthService {
     };
     await authProducer.publishDirectMessage(
       authChannel,
-      exchangeNames.AUTH_NOTIFICATION,
-      routingKeys.AUTH_USER,
+      exchangeNames.BUY_CREATED,
+      routingKeys.BUYER_CREATED,
       JSON.stringify(messageDetails),
       'User has been created'
     );

@@ -36,8 +36,8 @@ class CurrentUserController {
     };
     await authProducer.publishDirectMessage(
       authChannel,
-      exchangeNames.AUTH_EMAIL_NOTIFICATION,
-      routingKeys.AUTH_EMAIL,
+      exchangeNames.SEND_EMAIL,
+      routingKeys.SEND_EMAIL,
       JSON.stringify(messageDetails),
       'Verify email message has been sent to notification service.'
     );
