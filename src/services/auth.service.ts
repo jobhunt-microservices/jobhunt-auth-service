@@ -22,10 +22,10 @@ export class AuthService {
     };
     await authProducer.publishDirectMessage(
       authChannel,
-      exchangeNames.BUYER_UPDATE,
-      routingKeys.USER_BUYER,
+      exchangeNames.AUTH_NOTIFICATION,
+      routingKeys.AUTH_USER,
       JSON.stringify(messageDetails),
-      'Buyer details sent to buyer service'
+      'User has been created'
     );
     const userData: IAuthDocument = omit(result.dataValues) as IAuthDocument;
     return userData;

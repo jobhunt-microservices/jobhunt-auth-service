@@ -4,8 +4,8 @@ import { exchangeNames, routingKeys } from '@auth/queues/constants/queue.constan
 import { authProducer } from '@auth/queues/producers/auth.producer';
 import { authChannel } from '@auth/server';
 import { authService } from '@auth/services/auth.service';
+import { generateRandomCharacters } from '@auth/utils/generate.util';
 import { BadRequestError, IEmailMessageDetails, NotFoundError } from '@jobhunt-microservices/jobhunt-shared';
-import crypto from 'crypto';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
@@ -25,8 +25,7 @@ class CurrentUserController {
     if (existingUser.emailVerified) {
       throw new BadRequestError('Email has been verified', SERVICE_NAME + ' CurrentUser resentEmail() method error');
     }
-    const randomBytes: Buffer = await Promise.resolve(crypto.randomBytes(20));
-    const randomCharacters: string = randomBytes.toString('hex');
+    const randomCharacters = await generateRandomCharacters();
     const verificationLink = `${config.CLIENT_URL}/confirm_email?v_token=${randomCharacters}`;
 
     await authService.updateVerifyEmailField(existingUser.id!, 0, randomCharacters);
@@ -37,7 +36,7 @@ class CurrentUserController {
     };
     await authProducer.publishDirectMessage(
       authChannel,
-      exchangeNames.EMAIL_NOTIFICATION,
+      exchangeNames.AUTH_EMAIL_NOTIFICATION,
       routingKeys.AUTH_EMAIL,
       JSON.stringify(messageDetails),
       'Verify email message has been sent to notification service.'

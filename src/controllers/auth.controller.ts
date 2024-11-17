@@ -6,7 +6,7 @@ import { signinSchema } from '@auth/schemes/signin.scheme';
 import { signupSchema } from '@auth/schemes/signup.scheme';
 import { authChannel } from '@auth/server';
 import { authService } from '@auth/services/auth.service';
-import { BadRequestError, IAuthDocument, IEmailMessageDetails, isEmail, uploads } from '@jobhunt-microservices/jobhunt-shared';
+import { BadRequestError, IAuthDocument, IEmailMessageDetails, isEmail, lowerCase, uploads } from '@jobhunt-microservices/jobhunt-shared';
 import crypto from 'crypto';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
@@ -34,8 +34,8 @@ class AuthController {
     const randomBytes: Buffer = await Promise.resolve(crypto.randomBytes(20));
     const randomCharacters: string = randomBytes.toString('hex');
     const authData: IAuthDocument = {
-      username: username,
-      email: email,
+      username: lowerCase(username),
+      email: lowerCase(email),
       profilePublicId,
       password,
       profilePicture: uploadResult?.secure_url ?? null,
@@ -50,8 +50,8 @@ class AuthController {
     };
     await authProducer.publishDirectMessage(
       authChannel,
-      exchangeNames.EMAIL_NOTIFICATION,
-      routingKeys.USER_BUYER,
+      exchangeNames.AUTH_EMAIL_NOTIFICATION,
+      routingKeys.AUTH_EMAIL,
       JSON.stringify(messageDetails),
       'Verify email message has been sent to notification service'
     );

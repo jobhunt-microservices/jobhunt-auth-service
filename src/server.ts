@@ -2,6 +2,7 @@ import 'express-async-errors';
 
 import { config } from '@auth/config';
 import { SERVICE_NAME } from '@auth/constants';
+import { GIGS_INDEX } from '@auth/constants/elasticsearch';
 import { elasticSearch } from '@auth/elasticsearch';
 import { createConnection } from '@auth/queues/connections';
 import { appRoutes } from '@auth/routes';
@@ -40,6 +41,7 @@ export class AuthServer {
 
   private startElasticSearch() {
     elasticSearch.checkConnection();
+    elasticSearch.createIndex(GIGS_INDEX);
   }
 
   private securityMiddleware() {
@@ -54,6 +56,7 @@ export class AuthServer {
       })
     );
     this.app.use((req: Request, res: Response, next: NextFunction) => {
+      console.log(SERVICE_NAME + ' Starting Request:', JSON.stringify(req.url, null, 2));
       if (req.headers.authorization) {
         const token = (req.headers.authorization as string).split(' ')[1];
         const payload = verify(token, `${config.JWT_TOKEN}`) as IAuthPayload;
