@@ -9,7 +9,7 @@ const log = logger('authDatabaseServer', 'debug');
 export class Database {
   public sequelize: Sequelize;
   constructor() {
-    this.sequelize = new Sequelize(`${config.MYSQL_DB}`, {
+    this.sequelize = new Sequelize(`${config.DATABASE_URL}`, {
       dialect: 'mysql',
       logging: false,
       dialectOptions: {

@@ -8,7 +8,7 @@ class Config {
   public CLIENT_URL: string | undefined;
   public GATEWAY_JWT_TOKEN: string | undefined;
   public RABBITMQ_ENDPOINT: string | undefined;
-  public MYSQL_DB: string | undefined;
+  public DATABASE_URL: string | undefined;
   public CLOUND_NAME: string | undefined;
   public CLOUND_API_KEY: string | undefined;
   public CLOUND_API_SECRET: string | undefined;
@@ -23,7 +23,7 @@ class Config {
     this.CLIENT_URL = process.env.CLIENT_URL || '';
     this.GATEWAY_JWT_TOKEN = process.env.GATEWAY_JWT_TOKEN || '';
     this.RABBITMQ_ENDPOINT = process.env.RABBITMQ_ENDPOINT || '';
-    this.MYSQL_DB = process.env.MYSQL_DB || '';
+    this.DATABASE_URL = process.env.DATABASE_URL || '';
     this.CLOUND_NAME = process.env.CLOUND_NAME || '';
     this.CLOUND_API_KEY = process.env.CLOUND_API_KEY || '';
     this.CLOUND_API_SECRET = process.env.CLOUND_API_SECRET || '';
