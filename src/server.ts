@@ -2,7 +2,6 @@ import 'express-async-errors';
 
 import { config } from '@auth/config';
 import { SERVICE_NAME } from '@auth/constants';
-import { GIGS_INDEX } from '@auth/constants/elasticsearch';
 import { elasticSearch } from '@auth/elasticsearch';
 import { createConnection } from '@auth/queues/connections';
 import { appRoutes } from '@auth/routes';
@@ -41,7 +40,6 @@ export class AuthServer {
 
   private startElasticSearch() {
     elasticSearch.checkConnection();
-    elasticSearch.createIndex(GIGS_INDEX);
   }
 
   private securityMiddleware() {

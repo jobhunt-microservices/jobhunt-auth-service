@@ -4,7 +4,7 @@ import { logger } from '@auth/utils/logger.util';
 import { getErrorMessage } from '@jobhunt-microservices/jobhunt-shared';
 import { Channel } from 'amqplib';
 
-const log = logger('notificationEmailConsumer', 'debug');
+const log = logger('authProducerConsumer', 'debug');
 
 class AuthProducer {
   public publishDirectMessage = async (

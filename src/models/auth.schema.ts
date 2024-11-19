@@ -30,13 +30,13 @@ const AuthModel: AuthModelType = database.sequelize.define(
       type: DataTypes.STRING,
       allowNull: true
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     profilePicture: {
       type: DataTypes.STRING,
       allowNull: true
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
     emailVerified: {
       type: DataTypes.BOOLEAN,
